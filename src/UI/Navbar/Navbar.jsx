@@ -1,7 +1,16 @@
 import React from 'react';
-import { Menu, LogOut } from 'lucide-react';
+import { Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import doorExit from '../../assets/door-exit.png'; // Adjust the path as necessary
 
 const Navbar = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Navigate to the login page
+    navigate('/login');
+  };
+
   // You can replace these with dynamic values from your application state
   const userName = "Terry";
   const messageCount = 2;
@@ -26,10 +35,9 @@ const Navbar = ({ toggleSidebar }) => {
 
       {/* Right side controls */}
       <div className="ml-auto flex items-center gap-4">
-        <button className="text-gray-500 hover:text-gray-700">
-          <LogOut size={20} />
+        <button onClick={handleLogout} className="p-2 rounded-lg">
+          <img src={doorExit} alt="Logout" className="w-8 h-8" />
         </button>
-        
       </div>
     </nav>
   );
