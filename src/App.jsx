@@ -13,7 +13,7 @@ import DriverPage from "./Pages/DriverPage/DriverPage";
 import UsersPage from "./Pages/UsersPage/UsersPage";
 import ComplaintsPage from "./Pages/ComplaintsPage/Complaints";
 import EarningsPage from "./Pages/EarningsPage/EarningsPage";
-import SettingsPage from "./Pages/Settings/SettingS";
+import SettingsPage from "./Pages/Settings/Settings";
 
 function App() {
   return (
