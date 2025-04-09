@@ -16,10 +16,9 @@ const DashboardLayout = () => {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main Content with rounded borders and border styling except on sidebar side */}
-      <div className={`flex-1 bg-white rounded-3xl overflow-hidden border border-gray-200`}>
+      <div className={`flex-1 overflow-hidden`}>
         <div className="flex flex-col">
-          <Navbar toggleSidebar={toggleSidebar} />
-          <main className="flex-1 p-6">
+          <main className="flex-1 ">
             <Outlet />
           </main>
           

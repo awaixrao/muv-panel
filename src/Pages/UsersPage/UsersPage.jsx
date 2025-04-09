@@ -24,10 +24,11 @@ const DarkTable = ({ columns, data, currentPage = 1, totalPages = 1, onPageChang
     switch (status.toLowerCase()) {
       case 'active':
         return 'bg-green-500';
-      case 'completed':
-        return 'bg-amber-400';
+      case 'canceled':
       case 'cancelled':
         return 'bg-red-500';
+      case 'pending':
+        return 'bg-amber-400';
       default:
         return 'bg-gray-500';
     }
@@ -61,7 +62,7 @@ const DarkTable = ({ columns, data, currentPage = 1, totalPages = 1, onPageChang
       case 'status':
         return (
           <div className="inline-flex px-2 py-1 rounded-full text-xs text-white font-medium" 
-              style={{ backgroundColor: row.statusColor === 'red' ? '#EF4444' : '#10B981' }}>
+               style={{ backgroundColor: row.statusColor === 'red' ? '#EF4444' : '#10B981' }}>
             {row[column.accessor]}
           </div>
         );
@@ -85,23 +86,44 @@ const DarkTable = ({ columns, data, currentPage = 1, totalPages = 1, onPageChang
 
       case 'actions':
         return (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            {/* Eye Icon */}
             <button className="text-gray-400 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                <path d="M2 10a2 2 0 012-2h12a2 2 0 012 2 2 2 0 01-2 2H4a2 2 0 01-2-2z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
-            <button className="text-gray-400 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-            </button>
-            <button className="text-gray-400 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-              </svg>
-            </button>
+            
+            {/* Check Icon - Yellow for some rows */}
+            {row.id % 2 === 1 && (
+              <button className="text-amber-400 hover:text-amber-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </button>
+            )}
+            
+            {/* Green Check Icon for specific rows */}
+            {row.id === 3 && (
+              <button className="text-green-500 hover:text-green-400">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </button>
+            )}
+            
+            {/* Ban/Cancel Icon - Red for all rows */}
+            {row.id !== 3 && (
+              <button className="text-red-500 hover:text-red-400">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                </svg>
+              </button>
+            )}
           </div>
         );
 
@@ -155,17 +177,16 @@ const DarkTable = ({ columns, data, currentPage = 1, totalPages = 1, onPageChang
           Export User Data
         </button>
         <button className="bg-amber-400 text-black font-medium rounded px-3 py-1 text-sm">
-          View more
+          Add New User
         </button>
       </div>
     </div>
   );
 };
 
-// Demo component to showcase the table
-const TableDemo = () => {
+const UsersPage = () => {
   const columns = [
-    { header: 'User', accessor: 'name', type: 'user' },
+    { header: 'Name', accessor: 'name', type: 'user' },
     { header: 'Role', accessor: 'role', type: 'role' },
     { header: 'Status', accessor: 'status', type: 'status' },
     { header: 'Joined', accessor: 'joined', type: 'date' },
@@ -248,6 +269,33 @@ const TableDemo = () => {
 
   return (
     <div className="bg-black p-6 min-h-screen">
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-white mb-1">User Management</h1>
+        <p className="text-gray-400 text-sm">Manage users and their permissions</p>
+      </div>
+      
+      <div className="flex justify-between items-center mb-4">
+        <div className="relative flex-grow">
+          <input 
+            type="text" 
+            placeholder="Search users..." 
+            className="bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-4 py-2 pl-10 w-full"
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        
+        <div className="flex items-center ml-4">
+          <button className="bg-gray-800 text-white text-sm rounded-lg px-4 py-2 flex items-center">
+            <span>Filter All</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
       <DarkTable 
         columns={columns}
         data={data}
@@ -259,4 +307,4 @@ const TableDemo = () => {
   );
 };
 
-export default TableDemo;
+export default UsersPage;
